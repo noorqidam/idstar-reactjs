@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Todo List Vanilla JS</title>
+    <style>
+      .completed {
+        text-decoration: line-through;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Todo List</h1>
+
+    <form id="task-form">
+      <input type="text" id="task-input" placeholder="Masukkan tugas baru" />
+      <button type="submit">Tambah Tugas</button>
+    </form>
+
+    <ul id="task-list"></ul>
+
+    <p>Total Tugas Belum Selesai: <span id="incomplete-tasks">0</span></p>
+
+    <p id="all-tasks-done" style="display: none">Semua tugas telah selesai!</p>
+
+    <button id="mark-all-complete">Tandai Semua Selesai</button>
+
+    <button id="clear-tasks">Hapus Semua</button>
+
+    <script>
+      const taskForm = document.getElementById("task-form");
+      const taskInput = document.getElementById("task-input");
+      const taskList = document.getElementById("task-list");
+      const incompleteTasks = document.getElementById("incomplete-tasks");
+      const allTasksDoneMessage = document.getElementById("all-tasks-done");
+      const clearTasksButton = document.getElementById("clear-tasks");
+      const markAllCompleteButton =
+        document.getElementById("mark-all-complete");
+
+      const tasks = [];
+
+      const handleTaskFormSubmit = (e) => {
+        e.preventDefault();
+        const taskText = taskInput.value;
+        if (taskText.trim() !== "") {
+          tasks.push({ text: taskText, completed: false });
+          updateTaskList();
+          taskInput.value = "";
+        }
+      };
+
+      const createTaskListItem = (task, index) => {
+        const listItem = document.createElement("li");
+        listItem.innerHTML = `
+    <input type="checkbox" ${task.completed ? "checked" : ""} />
+    <span class="${task.completed ? "completed" : ""}">${task.text}</span>
+    <button class="delete">Hapus</button>
+  `;
+        const checkbox = listItem.querySelector("input[type=checkbox]");
+        checkbox.addEventListener("change", () =>
+          handleTaskCheckboxChange(index)
+        );
+        const deleteButton = listItem.querySelector(".delete");
+        deleteButton.addEventListener("click", () => deleteTask(index));
+        return listItem;
+      };
+
+      const handleTaskCheckboxChange = (index) => {
+        tasks[index].completed = !tasks[index].completed;
+        updateTaskList();
+      };
+
+      const deleteTask = (index) => {
+        tasks.splice(index, 1);
+        updateTaskList();
+      };
+
+      const updateIncompleteCount = (count) => {
+        incompleteTasks.textContent = count;
+      };
+
+      const toggleAllTasksDoneMessage = (incompleteCount) => {
+        allTasksDoneMessage.style.display =
+          incompleteCount === 0 ? "block" : "none";
+      };
+
+      const markAllTasksComplete = () => {
+        tasks.forEach((task) => {
+          task.completed = true;
+        });
+        updateTaskList();
+      };
+
+      const clearAllTasks = () => {
+        tasks.length = 0;
+        updateTaskList();
+      };
+
+      const updateTaskList = () => {
+        taskList.innerHTML = "";
+        let incompleteCount = 0;
+        tasks.forEach((task, index) => {
+          const listItem = createTaskListItem(task, index);
+          taskList.appendChild(listItem);
+          if (!task.completed) {
+            incompleteCount++;
+          }
+        });
+        updateIncompleteCount(incompleteCount);
+        toggleAllTasksDoneMessage(incompleteCount);
+      };
+
+      taskForm.addEventListener("submit", handleTaskFormSubmit);
+      markAllCompleteButton.addEventListener("click", markAllTasksComplete);
+      clearTasksButton.addEventListener("click", clearAllTasks);
+
+      updateTaskList();
+    </script>
+  </body>
+</html>

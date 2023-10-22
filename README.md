@@ -5,3 +5,4 @@
 ## Each level has multiple sessions.
 
 - [x] Level 1 (https://github.com/noorqidam/idstar-reactjs/tree/main/Level_1)
+- [x] Level 2 (https://github.com/noorqidam/idstar-reactjs/tree/main/Level_2)

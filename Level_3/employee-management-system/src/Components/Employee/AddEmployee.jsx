@@ -30,7 +30,7 @@ const AddEmployee = ({ onAddEmployee }) => {
   const [status, setStatus] = useState(true);
   const [nik, setNik] = useState("");
   const [npwp, setNpwp] = useState("");
-  const [birthdate, setBirthdate] = useState(new Date());
+  const [birthdate, setBirthdate] = useState("");
 
   const toggleModalAdd = () => {
     setModalAdd(!modalAdd);
@@ -65,17 +65,15 @@ const AddEmployee = ({ onAddEmployee }) => {
     if (validateData()) {
       const id = uuid();
       const idDetail = uuid();
-      const date = new Date();
-      const currentDate = format(date, "dd-MM-yyyy HH:mm:ss");
+      const formattedTrainingDate = new Date(birthdate).toISOString();
       const stat = status ? "Active" : "Inactive";
-      const bdate = format(birthdate, "dd-MM-yyyy");
 
       EmployeeDetail.push({
         id: idDetail,
         npwp: npwp,
         nik: nik,
-        createdDate: currentDate,
-        modifiedDate: currentDate,
+        createdDate: formattedTrainingDate,
+        modifiedDate: formattedTrainingDate,
         deletedDate: "",
       });
 
@@ -84,9 +82,9 @@ const AddEmployee = ({ onAddEmployee }) => {
         name: name,
         address: address,
         status: stat,
-        birthdate: bdate,
-        createdDate: currentDate,
-        modifiedDate: currentDate,
+        birthdate: formattedTrainingDate,
+        createdDate: formattedTrainingDate,
+        modifiedDate: formattedTrainingDate,
         deletedDate: "",
         detail: idDetail,
       });

@@ -67,6 +67,8 @@ const EditEmployee = ({ employee, onUpdateEmployee }) => {
         }
       });
 
+      console.log(Employees);
+
       EmployeesDetail.forEach((empDetail) => {
         if (empDetail.id.toString() === detail.id.toString()) {
           empDetail.nik = nik;

@@ -20,7 +20,8 @@ import EmployeeDetail from "src/Dummy/EmployeeDetail";
 import Datetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
 
-const AddEmployee = () => {
+// eslint-disable-next-line react/prop-types
+const AddEmployee = ({ onAddEmployee }) => {
   const navigate = useNavigate();
 
   const [modalAdd, setModalAdd] = useState(false);
@@ -89,6 +90,8 @@ const AddEmployee = () => {
         deletedDate: "",
         detail: idDetail,
       });
+
+      onAddEmployee();
 
       setName("");
       setAddress("");

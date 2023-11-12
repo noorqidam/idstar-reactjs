@@ -40,7 +40,6 @@ const EditEmployeeTraining = ({ employee, onUpdate }) => {
   };
 
   const onChangeTrainingDate = (e) => {
-    console.log(e._d);
     setTrainingDate(e._d);
   };
 
@@ -56,9 +55,7 @@ const EditEmployeeTraining = ({ employee, onUpdate }) => {
       });
 
       onUpdate();
-
       navigate("/employee-training");
-
       setModalEdit(!modalEdit);
       Swal.fire({
         title: "Success",

@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { Eye } from "react-bootstrap-icons";
 import { Button, Modal, ModalHeader, ModalBody, Row, Col } from "reactstrap";
+import { format, isValid, parseISO } from "date-fns";
 
 const ViewEmployee = ({ employee }) => {
   const { item, detail } = employee;
@@ -10,6 +11,14 @@ const ViewEmployee = ({ employee }) => {
   const handleModalView = () => {
     setModalView(!modalView);
   };
+
+  const formatDate = (dateString) => {
+    return isValid(parseISO(dateString))
+      ? format(parseISO(dateString), "dd-MM-yyyy")
+      : "Invalid Date";
+  };
+
+  const formattedBirthdate = formatDate(item?.birthdate);
 
   return (
     <>
@@ -29,7 +38,7 @@ const ViewEmployee = ({ employee }) => {
           </Row>
           <Row>
             <Col>Birthdate</Col>
-            <Col>{item?.birthdate}</Col>
+            <Col>{formattedBirthdate}</Col>
           </Row>
           <Row>
             <Col>NIK</Col>

@@ -15,8 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 import { Pencil } from "react-bootstrap-icons";
 import Swal from "sweetalert2";
-import EmployeesAccount from "src/Dummy/EmployeeAccount";
-import EmployeesDetail from "src/Dummy/EmployeeDetail";
+import { EmployeeAccount, EmployeesDetail } from "src/Dummy";
 
 const EditAccount = ({ employee, onUpdateAccount }) => {
   const navigate = useNavigate();
@@ -53,7 +52,7 @@ const EditAccount = ({ employee, onUpdateAccount }) => {
       let date = new Date();
       const currentDate = format(date, "dd-MM-yyyy HH:mm:ss");
 
-      EmployeesAccount.forEach((acc) => {
+      EmployeeAccount.forEach((acc) => {
         if (
           acc.id.toString() === item.id.toString() &&
           acc.employeeId.toString() === detail.id.toString()

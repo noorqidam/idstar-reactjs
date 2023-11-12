@@ -12,7 +12,7 @@ import {
   FormGroup,
 } from "reactstrap";
 import { useNavigate } from "react-router-dom";
-import { format } from "date-fns";
+import { format, isValid, parseISO } from "date-fns";
 import { FormCheck } from "react-bootstrap";
 import { Pencil } from "react-bootstrap-icons";
 import Swal from "sweetalert2";
@@ -21,16 +21,23 @@ import Employees from "src/Dummy/Employees";
 import EmployeesDetail from "src/Dummy/EmployeeDetail";
 import "react-datetime/css/react-datetime.css";
 
-const EditEmployee = (props) => {
+const EditEmployee = ({ employee, onUpdateEmployee }) => {
+  const { item, detail } = employee;
   const navigate = useNavigate();
 
-  const { item, detail } = props.employee;
+  const formatDate = (dateString) => {
+    return isValid(parseISO(dateString))
+      ? format(parseISO(dateString), "dd-MM-yyyy")
+      : "Invalid Date";
+  };
+
   const [name, setName] = useState(item.name);
   const [address, setAddress] = useState(item.address);
   const [status, setStatus] = useState(item.status === "Active" ? true : false);
   const [nik, setNik] = useState(detail.nik);
   const [npwp, setNpwp] = useState(detail.npwp);
-  const [birthdate, setBirthdate] = useState(item.birthdate);
+  const formattedBirthdate = formatDate(item.birthdate);
+  const [birthdate, setBirthdate] = useState(formattedBirthdate);
   const [modalEdit, setModalEdit] = useState(false);
 
   const handleChange = () => {
@@ -46,19 +53,17 @@ const EditEmployee = (props) => {
   };
 
   const submitEdit = () => {
-    let date = new Date();
-    const currentDate = format(date, "dd-MM-yyyy HH:mm:ss");
-    let bdate = format(birthdate, "dd-MM-yyyy");
-
     if (validateData()) {
-      var stat = status ? "Active" : "Inactive";
+      const currentDate = new Date();
+      let stat = status ? "Active" : "Inactive";
+
       Employees.forEach((emp) => {
         if (emp.id.toString() === item.id.toString()) {
           emp.name = name;
-          emp.birthdate = bdate;
+          emp.birthdate = birthdate.toISOString();
           emp.address = address;
           emp.status = stat;
-          emp.mdate = currentDate;
+          emp.modifiedDate = currentDate.toISOString();
         }
       });
 
@@ -66,12 +71,12 @@ const EditEmployee = (props) => {
         if (empDetail.id.toString() === detail.id.toString()) {
           empDetail.nik = nik;
           empDetail.npwp = npwp;
-          empDetail.mdate = currentDate;
+          empDetail.modifiedDate = currentDate.toISOString();
         }
       });
 
+      onUpdateEmployee();
       navigate("/employee");
-
       setModalEdit(!modalEdit);
       Swal.fire({
         title: "Success",
@@ -162,7 +167,7 @@ const EditEmployee = (props) => {
                 locale="en"
                 timeFormat={false}
                 dateFormat="DD-MM-YYYY"
-                initialValue={new Date(birthdate)}
+                initialValue={format(new Date(), "dd-MM-yyyy")}
                 value={birthdate}
                 onChange={(e) => {
                   onChangeBirthDate(e);

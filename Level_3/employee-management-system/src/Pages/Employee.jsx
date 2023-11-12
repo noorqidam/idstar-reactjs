@@ -7,60 +7,83 @@ import {
   EditEmployee,
   ViewEmployee,
 } from "src/Components/Employee";
+import { format, isValid, parseISO } from "date-fns";
 import { Header, Pagination, Searchbar } from "src/Components";
 import { Employees, EmployeesDetail } from "src/Dummy";
 
-const EmployeeTable = ({ currentData, handleDelete, indexOfFirstData }) => (
-  <Table className="text-center" responsive size="sm" striped bordered hover>
-    <thead>
-      <tr>
-        <th>No</th>
-        <th>Name</th>
-        <th>NIK</th>
-        <th>Birthdate</th>
-        <th>Address</th>
-        <th>Status</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      {currentData && currentData.length > 0 ? (
-        currentData.map((item, index) => {
-          const detail = EmployeesDetail.find(
-            (d) => d.id.toString() === item.detail.toString()
-          );
-          return (
-            <tr key={item.id}>
-              <td>{indexOfFirstData + index + 1}</td>
-              <td>{item.name}</td>
-              <td>{detail.nik}</td>
-              <td>{item.birthdate}</td>
-              <td>{item.address}</td>
-              <td>{item.status}</td>
-              <td className="d-flex justify-content-center">
-                <ViewEmployee employee={{ item, detail }} />
-                &nbsp;
-                <EditEmployee employee={{ item, detail }} />
-                &nbsp;
-                <DeleteEmployee id={item.id} handleDelete={handleDelete} />
-              </td>
-            </tr>
-          );
-        })
-      ) : (
+const EmployeeTable = ({
+  currentData,
+  handleDelete,
+  indexOfFirstData,
+  onUpdateEmployee,
+}) => {
+  const formatDate = (dateString) => {
+    return isValid(parseISO(dateString))
+      ? format(parseISO(dateString), "dd-MM-yyyy")
+      : "Invalid Date";
+  };
+  return (
+    <Table className="text-center" responsive size="sm" striped bordered hover>
+      <thead>
         <tr>
-          <td colSpan="7">No Data Available</td>
+          <th>No</th>
+          <th>Name</th>
+          <th>NIK</th>
+          <th>Birthdate</th>
+          <th>Address</th>
+          <th>Status</th>
+          <th>Action</th>
         </tr>
-      )}
-    </tbody>
-  </Table>
-);
+      </thead>
+      <tbody>
+        {currentData && currentData.length > 0 ? (
+          currentData.map((item, index) => {
+            const detail = EmployeesDetail.find(
+              (d) => d.id.toString() === item.detail.toString()
+            );
+            const formattedBirthdate = formatDate(item?.birthdate);
+            return (
+              <tr key={item.id}>
+                <td>{indexOfFirstData + index + 1}</td>
+                <td>{item.name}</td>
+                <td>{detail.nik}</td>
+                <td>{formattedBirthdate}</td>
+                <td>{item.address}</td>
+                <td>{item.status}</td>
+                <td className="d-flex justify-content-center">
+                  <ViewEmployee employee={{ item, detail }} />
+                  &nbsp;
+                  <EditEmployee
+                    employee={{ item, detail }}
+                    onUpdateEmployee={onUpdateEmployee}
+                  />
+                  &nbsp;
+                  <DeleteEmployee id={item.id} handleDelete={handleDelete} />
+                </td>
+              </tr>
+            );
+          })
+        ) : (
+          <tr>
+            <td colSpan="7">No Data Available</td>
+          </tr>
+        )}
+      </tbody>
+    </Table>
+  );
+};
 
-const EmployeeList = ({ currentData, handleDelete, indexOfFirstData }) => (
+const EmployeeList = ({
+  currentData,
+  handleDelete,
+  indexOfFirstData,
+  onUpdateEmployee,
+}) => (
   <Row>
     <EmployeeTable
       currentData={currentData}
       handleDelete={handleDelete}
+      onUpdateEmployee={onUpdateEmployee}
       indexOfFirstData={indexOfFirstData}
     />
   </Row>
@@ -77,7 +100,16 @@ const Employee = () => {
       item.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredData(updatedData);
+    setCurrentPage(1);
   }, [searchTerm]);
+
+  const handleAddEmployee = () => {
+    setFilteredData([...Employees]);
+  };
+
+  const handleUpdateEmployee = () => {
+    setFilteredData([...Employees]);
+  };
 
   const handleDelete = (id) => {
     const updatedEmployees = Employees.filter((item) => item.id !== id);
@@ -114,7 +146,7 @@ const Employee = () => {
         <Row>
           <Col md={12} className="d-flex my-2 justify-content-between">
             <h2>List Employee</h2>
-            <AddEmployee />
+            <AddEmployee onAddEmployee={handleAddEmployee} />
           </Col>
         </Row>
         <Row>
@@ -126,6 +158,7 @@ const Employee = () => {
           <EmployeeList
             currentData={currentData}
             handleDelete={handleDelete}
+            onUpdateEmployee={handleUpdateEmployee}
             indexOfFirstData={indexOfFirstData}
           />
         </Row>

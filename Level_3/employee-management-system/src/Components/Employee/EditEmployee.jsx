@@ -48,8 +48,8 @@ const EditEmployee = ({ employee, onUpdateEmployee }) => {
     setModalEdit(!modalEdit);
   };
 
-  const onChangeBirthDate = (e) => {
-    setBirthdate(e._d);
+  const onChangeBirthDate = (date) => {
+    setBirthdate(date);
   };
 
   const submitEdit = () => {
@@ -67,13 +67,11 @@ const EditEmployee = ({ employee, onUpdateEmployee }) => {
         }
       });
 
-      console.log(Employees);
-
       EmployeesDetail.forEach((empDetail) => {
         if (empDetail.id.toString() === detail.id.toString()) {
           empDetail.nik = nik;
           empDetail.npwp = npwp;
-          empDetail.modifiedDate = currentDate.toISOString();
+          empDetail.modifiedDate = currentDate;
         }
       });
 
@@ -171,8 +169,8 @@ const EditEmployee = ({ employee, onUpdateEmployee }) => {
                 dateFormat="DD-MM-YYYY"
                 initialValue={format(new Date(), "dd-MM-yyyy")}
                 value={birthdate}
-                onChange={(e) => {
-                  onChangeBirthDate(e);
+                onChange={(date) => {
+                  onChangeBirthDate(date);
                 }}
                 inputProps={{ placeholder: "Birthdate", readOnly: true }}
                 className="w-100 me-1"

@@ -1,0 +1,88 @@
+body {
+  min-height: 100vh;
+  font-size: 1.5rem;
+}
+
+.row-login {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.title-login {
+  color: #116466;
+  font-size: 60px;
+  display: inline-block;
+}
+
+.col-title {
+  text-align: left;
+}
+
+.title-form {
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.card-form-login {
+  color: #ffffff;
+  border-radius: 8px;
+  background-color: #116466;
+  padding: 30px;
+  width: 100%;
+}
+
+.button-login {
+  background: #ffffff;
+  color: #000000;
+  border: none;
+  width: 100px;
+}
+
+.button-login:hover {
+  background: #116466;
+  border: 1px solid #ffffff;
+}
+
+.input-group {
+  position: relative;
+}
+
+.input-group-text {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-right: 10px;
+  align-items: center;
+  border: none;
+  background: #ffffff;
+  z-index: 99;
+}
+
+.button-submit {
+  background: #116466;
+}
+
+.button-submit:hover {
+  background: #116643;
+}
+
+.button-add {
+  background: #116466;
+  color: #ffffff;
+}
+
+.button-add:hover {
+  background: #116643;
+}
+
+.form-label {
+  margin-bottom: 0 !important;
+}
+
+.select-page {
+  width: 70px;
+  margin-left: 20px;
+}

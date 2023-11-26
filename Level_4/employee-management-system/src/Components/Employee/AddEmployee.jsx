@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import apiConfig from "src/Config/api-config";
 import { format } from "date-fns";
 import {
   Button,
@@ -58,26 +59,41 @@ const AddEmployee = ({ onAddEmployee }) => {
     });
   };
 
-  const submitAdd = () => {
+  const submitAdd = async () => {
     if (validateData()) {
-      onAddEmployee();
+      try {
+        await apiConfig.post("/v1/karyawan/save", {
+          name,
+          dob: format(birthdate, "yyyy-MM-dd"),
+          status: status ? "active" : "inactive",
+          address,
+          karyawanDetail: {
+            nik,
+            npwp,
+          },
+        });
 
-      setName("");
-      setAddress("");
-      setNik("");
-      setNpwp("");
-      setStatus(true);
-      setBirthdate(new Date());
+        setName("");
+        setAddress("");
+        setNik("");
+        setNpwp("");
+        setStatus(true);
+        setBirthdate(new Date());
 
-      navigate("/employee");
-
-      toggleModalAdd();
-      Swal.fire({
-        title: "Success",
-        icon: "success",
-        text: "Success Add New Employee ",
-        timer: 3000,
-      });
+        navigate("/employee");
+        if (onAddEmployee) {
+          onAddEmployee();
+        }
+        toggleModalAdd();
+        Swal.fire({
+          title: "Success",
+          icon: "success",
+          text: "Success Add New Employee",
+          timer: 3000,
+        });
+      } catch (error) {
+        alertFail(`Failed to add a new employee ${error}`);
+      }
     }
   };
 

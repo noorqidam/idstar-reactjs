@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { Employee, Login, NotFound } from "src/Pages";
+import { Employee, Login, NotFound, Training } from "src/Pages";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
@@ -9,6 +9,7 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="*" element={<NotFound />} />
         <Route path="/employee" element={<Employee />} />
+        <Route path="/training" element={<Training />} />
       </Routes>
     </Router>
   );
